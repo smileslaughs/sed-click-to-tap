@@ -4,19 +4,20 @@
 <script src="js/jquery.sed-click-to-tap.js"></script>
 </head>
 <body>
-<p id="test">Hello, you are on a <b id="device"></b> device. click here</p>
+<p>Hello, you are on a <b id="device"></b> device. click here</p>
 <hr>
-<div id="test2">
-	<div> this click should be changed
-		<p> and this click should also change too </p>
+<div id="test">
+	<h1 data-sctignore>Testing switching of tap</h1>
+	<div>
+		<p>tap here</p>
+		<p data-sctignore>(ignore) tap here</p>
 	</div>
-	<div data-sctignore> this click should be ignored
-		<div> and this click should also be ignored too </div>
+	<h1 data-sctignore>Testing switching of click</h1>
+	<div>
+		<p>click here</p>
+		<p data-sctignore>(ignore) click here</p>
 	</div>
 </div>
-
-
-
 <a href="#" id="go">Go</a>
 
 
@@ -25,12 +26,7 @@
 $(document).ready(function() {
 		var supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
 		supportsTouch ? $('#device').text('touch') : $('#device').text('desktop')
-		$('#go').click(function(e){
-			e.preventDefault();
-			$('#test').clicktotap();
-			$('#test2').clicktotap();
-			console.log("clicked");
-			});
+		$('#test').clicktotap();
 		});
 
 </script>
