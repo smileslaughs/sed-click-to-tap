@@ -9,18 +9,36 @@
       var settings;
       settings = {
         findText: "click",
-        replaceText: "tap"
+        replaceText: "tap",
+        ignoreFlag: "sctignore"
       };
       settings = $.extend(settings, options);
       return this.each(function() {
-        var element, re, textContent;
-        element = $(this);
-        textContent = element.text();
-        re = new RegExp(settings.findText, "gi");
-        if (textContent.match(re)) {
-          textContent = textContent.replace(re, settings.replaceText);
-          return element.text(textContent);
+        var elem, element, fixers, _i, _len, _results;
+        element = this;
+        this.findChildren = function(el, find, replace) {
+          var re, textContent;
+          textContent = el.innerHTML;
+          re = new RegExp(find, "gi");
+          if (textContent.match(re)) {
+            textContent = textContent.replace(re, replace);
+            el.innerHTML = textContent;
+          }
+          if (($(el).children().length) > 0) {
+            return console.log('there are children');
+          } else {
+            return console.log('no children, put main function here');
+          }
+        };
+        this.findChildren(element, settings.findText, settings.replaceText);
+        fixers = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
+        _results = [];
+        for (_i = 0, _len = fixers.length; _i < _len; _i++) {
+          elem = fixers[_i];
+          this.findChildren(elem, settings.replaceText, settings.findText);
+          _results.push(console.log('how we are ignoring'));
         }
+        return _results;
       });
     }
   });

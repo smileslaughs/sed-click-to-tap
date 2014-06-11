@@ -6,15 +6,30 @@
 <body>
 <p id="test">Hello. click here</p>
 <hr>
+<div id="test2">
+	<div> this click should be changed
+		<p> and this click should also change too </p>
+	</div>
+	<div data-sctignore> this click should be ignored
+		<div> and this click should also be ignored too </div>
+	</div>
+</div>
+
+
+
 <a href="#" id="go">Go</a>
+
+
+
 <script type="text/javascript">
 $(document).ready(function() {
 		$('#go').click(function(e){
 			e.preventDefault();
 			$('#test').clicktotap();
+			$('#test2').clicktotap();
 			console.log("clicked");
 			});
-	});
+		});
 
 </script>
 </body>
