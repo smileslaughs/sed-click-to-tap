@@ -1,0 +1,21 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="js/jquery.sed-click-to-tap.js"></script>
+</head>
+<body>
+<p id="test">Hello. click here</p>
+<hr>
+<a href="#" id="go">Go</a>
+<script type="text/javascript">
+$(document).ready(function() {
+		$('#go').click(function(e){
+			e.preventDefault();
+			$('#test').clicktotap();
+			console.log("clicked");
+			});
+	});
+
+</script>
+</body>
+</html>
