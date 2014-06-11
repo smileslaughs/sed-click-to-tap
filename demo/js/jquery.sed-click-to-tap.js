@@ -22,12 +22,7 @@
           re = new RegExp(find, "gi");
           if (textContent.match(re)) {
             textContent = textContent.replace(re, replace);
-            el.innerHTML = textContent;
-          }
-          if (($(el).children().length) > 0) {
-            return console.log('there are children');
-          } else {
-            return console.log('no children, put main function here');
+            return el.innerHTML = textContent;
           }
         };
         this.findChildren(element, settings.findText, settings.replaceText);
@@ -35,8 +30,7 @@
         _results = [];
         for (_i = 0, _len = fixers.length; _i < _len; _i++) {
           elem = fixers[_i];
-          this.findChildren(elem, settings.replaceText, settings.findText);
-          _results.push(console.log('how we are ignoring'));
+          _results.push(this.findChildren(elem, settings.replaceText, settings.findText));
         }
         return _results;
       });
