@@ -24,7 +24,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-		var supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+		var supportsTouch = 'ontouchstart' in document.createElement('div') || navigator.msMaxTouchPoints;
 		supportsTouch ? $('#device').text('touch') : $('#device').text('desktop')
 		$('#test').clicktotap();
 		});
