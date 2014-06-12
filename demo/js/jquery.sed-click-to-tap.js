@@ -16,7 +16,7 @@
       settings = $.extend(settings, options);
       return this.each(function() {
         var changed, el, element, fixers, i, originals, supportsTouch, _i, _j, _len, _len1, _results;
-        this.findChildren = function(el, find, replace) {
+        this.switchText = function(el, find, replace) {
           var re, textContent;
           textContent = el.innerHTML;
           re = new RegExp(find, "gi");
@@ -34,9 +34,9 @@
           fixers.push(el.innerHTML);
         }
         if (supportsTouch) {
-          this.findChildren(element, settings.clickText, settings.touchText);
+          this.switchText(element, settings.clickText, settings.touchText);
         } else {
-          this.findChildren(element, settings.touchText, settings.clickText);
+          this.switchText(element, settings.touchText, settings.clickText);
         }
         changed = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
         _results = [];

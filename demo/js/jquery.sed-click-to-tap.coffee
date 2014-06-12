@@ -10,7 +10,7 @@ $.fn.extend
 
 
 		@each () ->
-			@findChildren = (el, find, replace) ->
+			@switchText = (el, find, replace) ->
 				textContent = el.innerHTML
 				re = new RegExp(find, "gi")
 				if textContent.match(re)
@@ -25,9 +25,9 @@ $.fn.extend
 			for el in originals
 				fixers.push(el.innerHTML)
 			if supportsTouch
-				@findChildren(element, settings.clickText, settings.touchText)
+				@switchText(element, settings.clickText, settings.touchText)
 			else
-				@findChildren(element, settings.touchText, settings.clickText)
+				@switchText(element, settings.touchText, settings.clickText)
 			changed = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
 
 			for el, i in changed
