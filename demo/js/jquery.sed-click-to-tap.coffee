@@ -20,16 +20,17 @@ $.fn.extend
 			element = @
 #check for touch support
 			supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints
-			console.log(supportsTouch)
+			fixers = []
+			originals = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
+			for el in originals
+				fixers.push(el.innerHTML)
 			if supportsTouch
 				@findChildren(element, settings.clickText, settings.touchText)
-				fixers = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
-				for element in fixers
-					@findChildren(element, settings.clickText, settings.touchText)
 			else
 				@findChildren(element, settings.touchText, settings.clickText)
-				fixers = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
-				for element in fixers
-					@findChildren(element, settings.touchText, settings.clickText)
+			changed = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
+
+			for el, i in changed
+				el.innerHTML = fixers[i]
 
 

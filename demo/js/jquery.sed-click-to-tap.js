@@ -15,7 +15,7 @@
       };
       settings = $.extend(settings, options);
       return this.each(function() {
-        var element, fixers, supportsTouch, _i, _j, _len, _len1, _results, _results1;
+        var changed, el, element, fixers, i, originals, supportsTouch, _i, _j, _len, _len1, _results;
         this.findChildren = function(el, find, replace) {
           var re, textContent;
           textContent = el.innerHTML;
@@ -27,26 +27,24 @@
         };
         element = this;
         supportsTouch = __indexOf.call(window, 'ontouchstart') >= 0 || navigator.msMaxTouchPoints;
-        console.log(supportsTouch);
+        fixers = [];
+        originals = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
+        for (_i = 0, _len = originals.length; _i < _len; _i++) {
+          el = originals[_i];
+          fixers.push(el.innerHTML);
+        }
         if (supportsTouch) {
           this.findChildren(element, settings.clickText, settings.touchText);
-          fixers = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
-          _results = [];
-          for (_i = 0, _len = fixers.length; _i < _len; _i++) {
-            element = fixers[_i];
-            _results.push(this.findChildren(element, settings.clickText, settings.touchText));
-          }
-          return _results;
         } else {
           this.findChildren(element, settings.touchText, settings.clickText);
-          fixers = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
-          _results1 = [];
-          for (_j = 0, _len1 = fixers.length; _j < _len1; _j++) {
-            element = fixers[_j];
-            _results1.push(this.findChildren(element, settings.touchText, settings.clickText));
-          }
-          return _results1;
         }
+        changed = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
+        _results = [];
+        for (i = _j = 0, _len1 = changed.length; _j < _len1; i = ++_j) {
+          el = changed[i];
+          _results.push(el.innerHTML = fixers[i]);
+        }
+        return _results;
       });
     }
   });
