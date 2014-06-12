@@ -14,35 +14,51 @@
       };
       settings = $.extend(settings, options);
       return this.each(function() {
-        var changed, el, element, fixers, i, originals, supportsTouch, _i, _j, _len, _len1, _results;
-        this.switchText = function(el, find, replace) {
-          var re, textContent;
-          textContent = el.innerHTML;
-          re = new RegExp(find, "gi");
-          if (textContent.match(re)) {
-            textContent = textContent.replace(re, replace);
-            return el.innerHTML = textContent;
+        var arr, changed, el, i, originals, replaceText, supportsTouch, walk, _i, _j, _len, _len1, _results;
+        supportsTouch = 'ontouchstart' in document.createElement('div') || navigator.msMaxTouchPoints;
+        walk = function(node) {
+          var child, next, _results;
+          switch (node.nodeType) {
+            case 1:
+            case 9:
+            case 11:
+              child = node.firstChild;
+              _results = [];
+              while (child) {
+                next = child.nextSibling;
+                walk(child);
+                _results.push(child = next);
+              }
+              return _results;
+              break;
+            case 3:
+              return replaceText(node);
           }
         };
-        element = this;
-        supportsTouch = 'ontouchstart' in document.createElement('div') || navigator.msMaxTouchPoints;
-        fixers = [];
+        replaceText = function(textNode) {
+          var re, v;
+          v = textNode.nodeValue;
+          if (supportsTouch) {
+            re = new RegExp(settings.clickText, 'gi');
+            v = v.replace(re, settings.touchText);
+          } else {
+            re = new RegExp(settings.touchText, 'gi');
+            v = v.replace(re, settings.clickText);
+          }
+          return textNode.nodeValue = v;
+        };
+        arr = [];
         originals = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
         for (_i = 0, _len = originals.length; _i < _len; _i++) {
           el = originals[_i];
-          fixers.push(el.innerHTML);
+          arr.push(el.innerHTML);
         }
-        console.log(supportsTouch);
-        if (supportsTouch) {
-          this.switchText(element, settings.clickText, settings.touchText);
-        } else {
-          this.switchText(element, settings.touchText, settings.clickText);
-        }
+        walk(this);
         changed = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');
         _results = [];
         for (i = _j = 0, _len1 = changed.length; _j < _len1; i = ++_j) {
           el = changed[i];
-          _results.push(el.innerHTML = fixers[i]);
+          _results.push(el.innerHTML = arr[i]);
         }
         return _results;
       });

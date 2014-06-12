@@ -10,29 +10,39 @@ $.fn.extend
 
 
 		@each () ->
-			@switchText = (el, find, replace) ->
-				textContent = el.innerHTML
-				re = new RegExp(find, "gi")
-				if textContent.match(re)
-					textContent = textContent.replace(re, replace)
-					el.innerHTML = textContent
-
-			element = @
-#check for touch support
+#cloud-to-butt's recursive DOM traversal, based of an SO answer
 			supportsTouch = 'ontouchstart' of document.createElement('div') || navigator.msMaxTouchPoints
-			fixers = []
+
+			walk = (node) ->
+				switch node.nodeType
+					when 1,9,11
+						child = node.firstChild
+						while child
+							next = child.nextSibling
+							walk child
+							child = next
+					when 3 then replaceText node
+
+			replaceText = (textNode) ->
+				v = textNode.nodeValue
+				if supportsTouch
+					re = new RegExp(settings.clickText, 'gi')
+					v = v.replace(re, settings.touchText)
+				else
+					re = new RegExp(settings.touchText, 'gi')
+					v = v.replace(re, settings.clickText)
+
+				textNode.nodeValue = v
+
+			arr = []
 			originals = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
 			for el in originals
-				fixers.push(el.innerHTML)
-
-			console.log(supportsTouch)
-			if supportsTouch
-				@switchText(element, settings.clickText, settings.touchText)
-			else
-				@switchText(element, settings.touchText, settings.clickText)
+				arr.push(el.innerHTML)
+			walk @
 
 			changed = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
 			for el, i in changed
-				el.innerHTML = fixers[i]
+				el.innerHTML = arr[i]
+
 
 
