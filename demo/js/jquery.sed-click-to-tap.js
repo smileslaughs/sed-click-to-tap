@@ -8,8 +8,8 @@
     clicktotap: function(options) {
       var settings;
       settings = {
-        clickText: "click",
-        touchText: "tap",
+        clickText: ["click", "clicked", "clicking"],
+        touchText: ["tap", "tapped", "tapping"],
         ignoreFlag: "sctignore"
       };
       settings = $.extend(settings, options);
@@ -36,16 +36,25 @@
           }
         };
         replaceText = function(textNode) {
-          var re, v;
+          var v;
           v = textNode.nodeValue;
           if (supportsTouch) {
-            re = new RegExp(settings.clickText, 'gi');
-            v = v.replace(re, settings.touchText);
+            return settings.clickText.forEach(function(text, i) {
+              var exp, re;
+              exp = "/\\b" + text + "\\b/";
+              re = new RegExp(eval(exp));
+              v = v.replace(re, settings.touchText[i]);
+              return textNode.nodeValue = v;
+            });
           } else {
-            re = new RegExp(settings.touchText, 'gi');
-            v = v.replace(re, settings.clickText);
+            return settings.touchText.forEach(function(text, i) {
+              var exp, re;
+              exp = "/\\b" + text + "\\b/";
+              re = new RegExp(eval(exp));
+              v = v.replace(re, settings.clickText[i]);
+              return textNode.nodeValue = v;
+            });
           }
-          return textNode.nodeValue = v;
         };
         arr = [];
         originals = this.querySelectorAll('[data-' + settings.ignoreFlag + ']');

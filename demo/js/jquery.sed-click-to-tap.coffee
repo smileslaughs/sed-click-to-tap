@@ -2,8 +2,8 @@ $ = jQuery
 $.fn.extend
 	clicktotap: (options) ->
 		settings =
-			clickText: "click"
-			touchText: "tap"
+			clickText: ["click", "clicked", "clicking"]
+			touchText: ["tap", "tapped", "tapping" ]
 			ignoreFlag: "sctignore"
 
 		settings = $.extend settings, options
@@ -26,23 +26,31 @@ $.fn.extend
 			replaceText = (textNode) ->
 				v = textNode.nodeValue
 				if supportsTouch
-					re = new RegExp(settings.clickText, 'gi')
-					v = v.replace(re, settings.touchText)
+					settings.clickText.forEach (text, i) ->
+						exp = "/\\b" + text + "\\b/"
+						re = new RegExp(eval(exp))
+						v = v.replace(re, settings.touchText[i])
+						textNode.nodeValue = v
 				else
-					re = new RegExp(settings.touchText, 'gi')
-					v = v.replace(re, settings.clickText)
+					settings.touchText.forEach (text, i) ->
+						exp = "/\\b" + text + "\\b/"
+						re = new RegExp(eval(exp))
+						v = v.replace(re, settings.clickText[i])
+						textNode.nodeValue = v
 
-				textNode.nodeValue = v
+
 
 			arr = []
 			originals = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
 			for el in originals
 				arr.push(el.innerHTML)
+
 			walk @
 
 			changed = @.querySelectorAll('[data-'+ settings.ignoreFlag + ']')
 			for el, i in changed
 				el.innerHTML = arr[i]
+
 
 
 
